@@ -212,11 +212,12 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://auziqni:HmKT6u9GCzbY@ep-black-frog-17726020-pooler.ap-southeast-1.aws.neon.tech/absen?sslmode=require"
+        "value": null
       }
     }
   },
