@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
+enum StatusKehadiran {
+  HADIR
+  TELAT
+  IZIN
+  SAKIT
+  ALPHA
+  NONE
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String
+  nama          String
+  role          UserRole
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Fields khusus untuk STUDENT
+  nim           String?   @unique
+  absensi       Absensi[]
+  
+  // Fields khusus untuk TEACHER
+  nip           String?   @unique
+  kelasAjar     Kelas[]
+}
+
+model Kelas {
+  id              String       @id @default(uuid())
+  kodeKelas       String       @unique
+  namaKelas       String
+  pinKelas        String
+  hariPertemuan   String       // Bisa pakai enum juga
+  jumlahPertemuan Int
+  statusAktif     Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  
+  // Relations
+  dosen           User         @relation(fields: [dosenId], references: [id])
+  dosenId         String
+  pertemuan       Pertemuan[]
+}
+
+model Pertemuan {
+  id               String           @id @default(uuid())
+  nomorPertemuan   Int
+  tanggalPertemuan DateTime
+  topik            String?
+  catatan          String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  
+  // Relations
+  kelas            Kelas            @relation(fields: [kelasId], references: [id])
+  kelasId          String
+  absensi          Absensi[]
+}
+
+
+
+model Absensi {
+  id              String           @id @default(uuid())
+  jamAbsen        DateTime          
+  statusKehadiran StatusKehadiran  @default(HADIR)
+  lokasi          String?
+  keterangan      String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  
+  // Relations
+  mahasiswa       User             @relation(fields: [mahasiswaId], references: [id])
+  mahasiswaId     String
+  pertemuan       Pertemuan        @relation(fields: [pertemuanId], references: [id])
+  pertemuanId     String
+}
