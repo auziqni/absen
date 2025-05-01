@@ -117,52 +117,78 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.UserScalarFieldEnum = {
+exports.Prisma.AdminScalarFieldEnum = {
   id: 'id',
   email: 'email',
   password: 'password',
   nama: 'nama',
-  role: 'role',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DosenScalarFieldEnum = {
+  id: 'id',
+  nip: 'nip',
+  nama: 'nama',
+  email: 'email',
+  password: 'password',
+  noHP: 'noHP',
+  alamat: 'alamat',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MahasiswaScalarFieldEnum = {
+  id: 'id',
   nim: 'nim',
-  nip: 'nip'
+  nama: 'nama',
+  email: 'email',
+  password: 'password',
+  noHP: 'noHP',
+  alamat: 'alamat',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.KelasScalarFieldEnum = {
   id: 'id',
   kodeKelas: 'kodeKelas',
   namaKelas: 'namaKelas',
+  deskripsi: 'deskripsi',
   pinKelas: 'pinKelas',
   hariPertemuan: 'hariPertemuan',
   jumlahPertemuan: 'jumlahPertemuan',
   statusAktif: 'statusAktif',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  dosenId: 'dosenId'
+  dosenUtamaId: 'dosenUtamaId',
+  dosenPendampingId: 'dosenPendampingId'
 };
 
-exports.Prisma.PertemuanScalarFieldEnum = {
+exports.Prisma.MahasiswaKelasScalarFieldEnum = {
+  id: 'id',
+  mahasiswaId: 'mahasiswaId',
+  kelasId: 'kelasId',
+  tanggalGabung: 'tanggalGabung',
+  statusAktif: 'statusAktif',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PertemuanAbsensiScalarFieldEnum = {
   id: 'id',
   nomorPertemuan: 'nomorPertemuan',
   tanggalPertemuan: 'tanggalPertemuan',
   topik: 'topik',
   catatan: 'catatan',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  kelasId: 'kelasId'
-};
-
-exports.Prisma.AbsensiScalarFieldEnum = {
-  id: 'id',
-  jamAbsen: 'jamAbsen',
+  mahasiswaId: 'mahasiswaId',
   statusKehadiran: 'statusKehadiran',
+  jamAbsen: 'jamAbsen',
   lokasi: 'lokasi',
   keterangan: 'keterangan',
+  kelasId: 'kelasId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  mahasiswaId: 'mahasiswaId',
-  pertemuanId: 'pertemuanId'
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -179,12 +205,6 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-exports.UserRole = exports.$Enums.UserRole = {
-  ADMIN: 'ADMIN',
-  TEACHER: 'TEACHER',
-  STUDENT: 'STUDENT'
-};
-
 exports.StatusKehadiran = exports.$Enums.StatusKehadiran = {
   HADIR: 'HADIR',
   TELAT: 'TELAT',
@@ -195,10 +215,12 @@ exports.StatusKehadiran = exports.$Enums.StatusKehadiran = {
 };
 
 exports.Prisma.ModelName = {
-  User: 'User',
+  Admin: 'Admin',
+  Dosen: 'Dosen',
+  Mahasiswa: 'Mahasiswa',
   Kelas: 'Kelas',
-  Pertemuan: 'Pertemuan',
-  Absensi: 'Absensi'
+  MahasiswaKelas: 'MahasiswaKelas',
+  PertemuanAbsensi: 'PertemuanAbsensi'
 };
 
 /**

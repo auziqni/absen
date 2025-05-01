@@ -3,8 +3,8 @@ import React from "react";
 export default function FooterLanding() {
   return (
     <footer className="bg-[#37517E] py-4">
-      <span className=" mx-20 flex justify-center text-center text-sm text-gray-400">
-        &copy; 2024 AAFO. All Rights Reserved | .
+      <span className="flex justify-center mx-20 text-sm text-center text-gray-400 ">
+        &copy; 2025 FACE. All Rights Reserved | .
         <a
           href="https://www.teknisee.com/"
           target="_blank"

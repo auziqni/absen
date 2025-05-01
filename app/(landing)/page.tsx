@@ -16,9 +16,9 @@ export default function Home() {
             className="absolute -translate-y-1/2 top-1/2 right-20"
           />
           <div className="absolute ml-20 top-1/3 ">
-            <h1 className="text-6xl font-bold text-white ">AAFO</h1>
+            <h1 className="text-6xl font-bold text-white ">FACE</h1>
             <p className="text-2xl font-semibold text-white">
-              Active Ankle Foot Orthosis
+              Face Authentication for Class Entry
             </p>
           </div>
         </div>
@@ -27,23 +27,21 @@ export default function Home() {
       <div id="layanan" className="flex flex-col items-center gap-10 ">
         <h2 className=" font-bold text-4xl text-[#37517E] ">Layanan</h2>
         <p className="max-w-3xl text-center">
-          Layanan website AAFO memanfaatkan teknologi canggih seperti sensor,
-          dan analitik data untuk memberikan wawasan real time dan rekomendasi
-          yang dapat ditindak lanjuti bagi fisioterapis dalam memantau pola
-          berjalan penderita hemiparesis. Layanan ini membantu fisioterapis
-          untuk meningkatkan efisiensi dalam memantau pola berjalan dengan
-          memungkinkan pengambilan keputusan yang lebih tepat dan berbasis data
-          dalam rehabilitasi.
+          Layanan website FACE memanfaatkan teknologi canggih seperti sensor,
+          dan absensi mahasiswa secara real time dan rekomendasi yang dapat
+          ditindak lanjuti bagi dosen dalam memantau mahasiswa dalam absensi,
+          mengurangi manipulasi data absensi. Layanan ini membantu dosen untuk
+          meningkatkan efisiensi waktu dalam absensi dengan biaya yang optimal.
         </p>
         <div className="flex gap-5 ">
           <div className="bg-white rounded-lg shadow-lg p-4 w-[244px] h-[330px] flex flex-col gap-8 items-center">
             <Gauge className="w-24 h-24 mr-3" />
             <div className="flex flex-col items-center gap-1">
               <h3 className="text-xl text-center font-semibold text-[#37517E]">
-                Sudut
+                Mahasiswa
               </h3>
               <p className="text-center ">
-                Sudut dan Servo Angle diukur dalam satuan (°)
+                Mahasiswa melakukan absensi pada waktu yang di tetapkan
               </p>
             </div>
           </div>
@@ -51,18 +49,23 @@ export default function Home() {
             <Shapes className="w-24 h-24 mr-3" />
             <div className="flex flex-col items-center gap-1">
               <h3 className="text-xl text-center font-semibold text-[#37517E]">
-                Tekanan Depan (Toe)
+                kehadiran
               </h3>
-              <p className="text-center ">Toe diukur dalam satuan (N/m²)</p>
+              <p className="text-center ">
+                kehadiran mahasiwa dicatat secara realtime
+              </p>
             </div>
           </div>
           <div className="bg-white rounded-lg shadow-lg p-4 w-[244px] h-[330px] flex flex-col gap-8 items-center">
             <Shapes className="w-24 h-24 mr-3" />
             <div className="flex flex-col items-center gap-1">
               <h3 className="text-xl text-center font-semibold text-[#37517E]">
-                Tekanan Belakang (Heel)
+                Data Daftar Hadir
               </h3>
-              <p className="text-center ">Heel diukur dalam satuan (N/m²)</p>
+              <p className="text-center ">
+                Data Daftar Mahasiswa meliputi nama, NIM, kelas serta waktu
+                absen akan di tampilkan pada website
+              </p>
             </div>
           </div>
         </div>
@@ -86,23 +89,21 @@ export default function Home() {
             TENTANG KAMI
           </h2>
           <p className="text-justify ">
-            Active ankle foot orthosis (AAFO) merupakan sebuah alat bantu yang
-            ditancang untuk membantu individu dengan gangguan pergerakkan kaki
-            seperti penderita stroke yang mengalami hemiparesis. Website ini
-            membantu untuk memantau perkembangan sudut, tekanan depan (Toe)
-            serta tekanan belakang (Heel) sesuai dengan pola berjalan secara
-            real time
+            Face Authentication for Class Entry (FACE) merupakan sebuah alat
+            bantu yang dirancang untuk membantu kampus dalam mendata kehadiran
+            Mahasiswa pada mata kuliah secara real time, sehingga mengurangi
+            adanya manipulasi data kehadiran.
           </p>
           <p className="text-justify ">
-            Website ini membantu untuk memantau perkembangan sudut, tekanan
-            depan serta tekanan belakang secara real time
+            Website ini membantu mendata kehadiran Mahasiswa secara akurat dan
+            real time
           </p>
           <div className="grid grid-cols-2 px-10 mt-10">
             <div className="col-span-1">
               <h3 className="font-bold">Tim</h3>
-              <p className="hover:text-yellow-600">Dewi Nur Azizah</p>
-              <p className="hover:text-yellow-600">Satriani Syarma Fasih</p>
-              <p className="hover:text-yellow-600">Zahra Oktaviona</p>
+              <p className="hover:text-yellow-600">Ichwanul Azyrofi</p>
+              <p className="hover:text-yellow-600">Muhammad Adi Kurniawan</p>
+              <p className="hover:text-yellow-600">M. Aufa Al Rasyid N</p>
             </div>
             <div className="col-span-1">
               <h3 className="font-bold">alamat</h3>
