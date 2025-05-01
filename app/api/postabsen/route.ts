@@ -5,96 +5,130 @@ const prisma = new PrismaClient();
 
 type reqData = {
   mahasiswaId: string;
-  pertemuanId: string;
+  noPertemuan: number;
+  kodeKelas: string;
+  statusKehadiran: StatusKehadiran;
+  keterangan?: string;
+  lokasi?: string;
 };
 
-export async function POST(request: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const body: reqData = await request.json();
+    // Mendapatkan data dari body request
+    const body = (await req.json()) as reqData;
+    const {
+      mahasiswaId,
+      noPertemuan,
+      kodeKelas,
+      statusKehadiran,
+      keterangan,
+      lokasi,
+    } = body;
 
     // Validasi input
-    if (!body.mahasiswaId || !body.pertemuanId) {
+    if (!mahasiswaId || !noPertemuan || !kodeKelas || !statusKehadiran) {
       return NextResponse.json(
-        { error: "mahasiswaId dan pertemuanId diperlukan" },
+        { message: "Data tidak lengkap" },
         { status: 400 }
       );
     }
 
-    try {
-      // Periksa apakah mahasiswa ada dan merupakan STUDENT
-      const mahasiswa = await prisma.user.findUnique({
-        where: { id: body.mahasiswaId },
-      });
-
-      if (!mahasiswa || mahasiswa.role !== "STUDENT") {
-        return NextResponse.json(
-          { error: "Mahasiswa tidak ditemukan" },
-          { status: 404 }
-        );
-      }
-
-      // Periksa apakah pertemuan ada
-      const pertemuan = await prisma.pertemuan.findUnique({
-        where: { id: body.pertemuanId },
-      });
-
-      if (!pertemuan) {
-        return NextResponse.json(
-          { error: "Pertemuan tidak ditemukan" },
-          { status: 404 }
-        );
-      }
-
-      // Cari catatan absensi yang sudah ada
-      const existingAbsensi = await prisma.absensi.findFirst({
-        where: {
-          mahasiswaId: body.mahasiswaId,
-          pertemuanId: body.pertemuanId,
-        },
-      });
-
-      let absensi;
-
-      if (existingAbsensi) {
-        // Update catatan yang sudah ada
-        absensi = await prisma.absensi.update({
-          where: { id: existingAbsensi.id },
-          data: {
-            statusKehadiran: StatusKehadiran.HADIR,
-            jamAbsen: new Date(), // Update waktu absen
-            updatedAt: new Date(),
-          },
-        });
-      } else {
-        // Buat catatan baru
-        absensi = await prisma.absensi.create({
-          data: {
-            mahasiswa: {
-              connect: { id: body.mahasiswaId },
-            },
-            pertemuan: {
-              connect: { id: body.pertemuanId },
-            },
-            statusKehadiran: StatusKehadiran.HADIR,
-            jamAbsen: new Date(),
-          },
-        });
-      }
-
-      return NextResponse.json({
-        message: existingAbsensi
-          ? "Absensi berhasil diperbarui"
-          : "Absensi berhasil dicatat",
-        data: absensi,
-      });
-    } catch (error) {
-      console.error("Error mencatat absensi:", error);
+    // Validasi status kehadiran
+    if (!Object.values(StatusKehadiran).includes(statusKehadiran)) {
       return NextResponse.json(
-        { error: "Terjadi kesalahan saat memproses absensi" },
-        { status: 500 }
+        { message: "Status kehadiran tidak valid" },
+        { status: 400 }
       );
     }
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+
+    // Cari kelas berdasarkan kodeKelas
+    const kelas = await prisma.kelas.findUnique({
+      where: { kodeKelas },
+    });
+
+    if (!kelas) {
+      return NextResponse.json(
+        { message: "Kelas tidak ditemukan" },
+        { status: 404 }
+      );
+    }
+
+    // Cari pertemuan untuk mendapatkan nomorPertemuan dan kelasId
+    const pertemuan = await prisma.pertemuanAbsensi.findFirst({
+      where: {
+        nomorPertemuan: noPertemuan,
+        kelasId: kelas.id,
+      },
+      select: {
+        nomorPertemuan: true,
+        kelasId: true,
+      },
+    });
+
+    if (!pertemuan) {
+      return NextResponse.json(
+        { message: "Pertemuan tidak ditemukan" },
+        { status: 404 }
+      );
+    }
+
+    // Cek apakah mahasiswa terdaftar di kelas ini
+    const mahasiswaKelas = await prisma.mahasiswaKelas.findUnique({
+      where: {
+        mahasiswaId_kelasId: {
+          mahasiswaId,
+          kelasId: kelas.id,
+        },
+      },
+    });
+
+    if (!mahasiswaKelas) {
+      return NextResponse.json(
+        { message: "Mahasiswa tidak terdaftar di kelas ini" },
+        { status: 400 }
+      );
+    }
+
+    // Perbarui atau buat data kehadiran
+    const absensi = await prisma.pertemuanAbsensi.upsert({
+      where: {
+        kelasId_nomorPertemuan_mahasiswaId: {
+          kelasId: pertemuan.kelasId,
+          nomorPertemuan: pertemuan.nomorPertemuan,
+          mahasiswaId,
+        },
+      },
+      update: {
+        statusKehadiran,
+        jamAbsen: new Date(),
+        lokasi: lokasi || null,
+        keterangan: keterangan || null,
+      },
+      create: {
+        kelasId: pertemuan.kelasId,
+        nomorPertemuan: pertemuan.nomorPertemuan,
+        mahasiswaId,
+        tanggalPertemuan: new Date(), // Asumsi tanggal pertemuan adalah saat ini jika baru dibuat
+        statusKehadiran,
+        jamAbsen: new Date(),
+        lokasi: lokasi || null,
+        keterangan: keterangan || null,
+      },
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: "Kehadiran berhasil diperbarui",
+      data: absensi,
+    });
+  } catch (error) {
+    console.error("Error updating attendance:", error);
+    return NextResponse.json(
+      { message: "Terjadi kesalahan server", error: String(error) },
+      { status: 500 }
+    );
+  } finally {
+    // Pastikan untuk menutup koneksi Prisma jika ini adalah standalone request
+    await prisma.$disconnect();
   }
 }
