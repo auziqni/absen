@@ -128,7 +128,7 @@ const kelas: Prisma.KelasCreateInput[] = [
   {
     id: "EL2022",
     kodeKelas: "EL2022",
-    namaKelas: "Etika Profesi",
+    namaKelas: "Medan Elektromagnetik",
     pinKelas: "1234",
     hariPertemuan: "",
     dosen: {
@@ -143,7 +143,7 @@ const kelas: Prisma.KelasCreateInput[] = [
   {
     id: "EL2023",
     kodeKelas: "EL2023",
-    namaKelas: "Etika Profesi",
+    namaKelas: "Elektronika",
     pinKelas: "1234",
     hariPertemuan: "",
     dosen: {
@@ -158,7 +158,7 @@ const kelas: Prisma.KelasCreateInput[] = [
   {
     id: "EL2024",
     kodeKelas: "EL2024",
-    namaKelas: "Etika Profesi",
+    namaKelas: "Manajemen Industri",
     pinKelas: "1234",
     hariPertemuan: "",
     dosen: {
